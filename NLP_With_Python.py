@@ -102,7 +102,7 @@ print(line_num_words)
 
 ############# Building a Counter with Bag of words ########################################
 ####### Preprocessing
-
+import collections
 from collections import Counter
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -141,10 +141,10 @@ sentences_1 = sent_tokenize(scene_one)
 Tokenization_1 =  [word_tokenize(f) for f in sentences_1 ]
 stop_words_1 = [t for t in Tokenization_1 if t not in stopwords.words('english')]
 
-#print(stop_words_1)
+print(sentences_1[0:2])
 
 dictionary = Dictionary(stop_words_1)
-#print(dictionary.token2id)
+print(dictionary.token2id)
 
 #Creating Corpus
 corpus = [dictionary.doc2bow(doc) for doc in stop_words_1]
@@ -152,18 +152,26 @@ corpus = [dictionary.doc2bow(doc) for doc in stop_words_1]
 
 
 ############## Gensim Bag of words ####################################################
+import itertools
+
 
 #   save second document
-doc = corpus[2]
-print(doc)
+doc = corpus[0:2]
+#print(doc)
 #   Sort the doc for frequency: bow_doc
 bow_doc = sorted(doc, key = lambda w : w[1], reverse = True)
 print(bow_doc)
 
 # print top 4 words of document
 
-for word_id, word_count in bow_doc:
+for word_id, word_count in itertools.chain.from_iterable(doc):
+#in bow_doc.items():
     print(dictionary.get(word_id),word_count)
+
+total_word_count = collections.defaultdict(int)
+for word_id, word_count in itertools.chain.from_iterable(corpus):
+    total_word_count[word_id] += word_count
+print(total_word_count)
 
 '''
 ############################ Gensim: Dictionary & Corpora ###################################################
@@ -184,7 +192,7 @@ corpus = [dictionary.doc2bow(doc) for doc in stop_words_1]
 #print(corpus)
 
 
-############## Gensim Bag of words ###############################mnn#####################
+############## Gensim Bag of words ####################################################
 
 
 #   save second document
@@ -200,6 +208,7 @@ for word_id, word_count in bow_doc[:5]:
     print(dictionary.get(word_id),word_count)
 '''
 ######## TfIDF with Genism ################################################################
+
 from gensim.models.tfidfmodel import TfidfModel
 
 # Create a new TfidfModel using the corpus: tfidf
@@ -209,6 +218,7 @@ tfidf = TfidfModel(corpus)
 tfidf_weights = tfidf[doc]
 
 # Print the first five weights
-print(tfidf_weights[:5])
+for t in tfidf_weights:
+    print(t)
 
 
