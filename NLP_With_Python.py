@@ -146,12 +146,69 @@ stop_words_1 = [t for t in Tokenization_1 if t not in stopwords.words('english')
 dictionary = Dictionary(stop_words_1)
 #print(dictionary.token2id)
 
+#Creating Corpus
 corpus = [dictionary.doc2bow(doc) for doc in stop_words_1]
-print(corpus[0:1])
+#print(corpus[0:2])
 
 
+############## Gensim Bag of words ####################################################
+
+#   save second document
+doc = corpus[2]
+print(doc)
+#   Sort the doc for frequency: bow_doc
+bow_doc = sorted(doc, key = lambda w : w[1], reverse = True)
+print(bow_doc)
+
+# print top 4 words of document
+
+for word_id, word_count in bow_doc:
+    print(dictionary.get(word_id),word_count)
+
+'''
+############################ Gensim: Dictionary & Corpora ###################################################
+
+from gensim.corpora.dictionary import Dictionary
+scene_one = scene_one.lower()
+Tokenization_1 =  [word_tokenize(scene_one) ] 
+stop_words_1 = [t for t in Tokenization_1 if t not in stopwords.words('english')]
+#print(Tokenization_1)
+#print(stop_words_1)
 
 
+dictionary = Dictionary(stop_words_1)
+#print(dictionary.token2id)
 
+#Creating Corpus
+corpus = [dictionary.doc2bow(doc) for doc in stop_words_1]
+#print(corpus)
+
+
+############## Gensim Bag of words ###############################mnn#####################
+
+
+#   save second document
+doc = corpus[0]
+#print(doc)
+
+#   Sort the doc for frequency: bow_doc
+bow_doc = sorted(doc, key = lambda w : w[1], reverse = True)
+#print(bow_doc)
+
+# print top 4 words of document
+for word_id, word_count in bow_doc[:5]:
+    print(dictionary.get(word_id),word_count)
+'''
+######## TfIDF with Genism ################################################################
+from gensim.models.tfidfmodel import TfidfModel
+
+# Create a new TfidfModel using the corpus: tfidf
+tfidf = TfidfModel(corpus)
+
+# Calculate the tfidf weights of doc: tfidf_weights
+tfidf_weights = tfidf[doc]
+
+# Print the first five weights
+print(tfidf_weights[:5])
 
 
